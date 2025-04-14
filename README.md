@@ -30,7 +30,6 @@ client1
 Create a playbook (e.g., `site.yml`) with the following content:
 
 ```yaml
----
 - name: OpenVPN setup
   hosts: server
   become: true
