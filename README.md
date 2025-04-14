@@ -38,14 +38,6 @@ Create a playbook (e.g., `site.yml`) with the following content:
     - role: openvpn
 ```
 
-### Run the Playbook
-
-Run the playbook with the following command:
-
-```bash
-ansible-playbook site.yml -i inventory
-```
-
 ### Inventory Example
 
 Your inventory file (e.g., `inventory.ini`) should look like this:
@@ -55,10 +47,12 @@ Your inventory file (e.g., `inventory.ini`) should look like this:
 192.xxx.x.xxx ansible_user=ubuntu
 ```
 
-Run the playbook with the inventory:
+### Run the Playbook
+
+Run the playbook with the following command:
 
 ```bash
-ansible-playbook -i inventory.ini playbook.yaml
+ansible-playbook site.yml -i inventory
 ```
 
 ---
