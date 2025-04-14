@@ -1,6 +1,6 @@
 ---
 - name: Including install.yaml OpenVPN tasks
-  include: install.yaml
+  include_tasks: install.yaml
 
 - name: Verifying easyrsa exist
   stat:
@@ -8,25 +8,25 @@
   register: rsa
 
 - name: Including easy-rsa.yaml for OpenVPN setup
-  include: easy-rsa.yaml
+  include_tasks: easy-rsa.yaml
   when: not rsa.stat.exists
 
 - name: Including server_keys.yaml for OpenVPN setup
-  include: server_keys.yaml
+  include_tasks: server_keys.yaml
 
 - name: Including config.yaml for OpenVPN setup
-  include: config.yaml
+  include_tasks: config.yaml
 
 - name: Including client_keys.yaml for OpenVPN setup
-  include: client_keys.yaml
+  include_tasks: client_keys.yaml
   tags:
     - generate_client_keys
 
 - name: Including revoke.yaml for OpenVpn setup
-  include: revoke.yaml
+  include_tasks: revoke.yaml
   tags:
     - revoke_client_keys
 
 - name: Including firewall.yaml for OpenVPN setup
-  include: firewall.yaml
+  include_tasks: firewall.yaml
 ...
