@@ -70,7 +70,7 @@ scp -i [ssh_key_to_server] [server_host]@[server_ip]:/etc/openvpn/client1.ovpn /
 4. If it exists, **stop the OpenVPN service** on the client machine:
 
 ```bash
-sudo systemctl stop openvpn@client1
+sudo systemctl stop openvpn@server
 ```
 
 5. **Run OpenVPN** on the client machine:
