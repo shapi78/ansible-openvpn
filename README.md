@@ -11,7 +11,7 @@
 Clone the repository into your Ansible roles directory:
 
 ```bash
-cd /ansible/etc/roles
+cd /etc/ansible/roles
 git clone git@github.com:shmador/openvpn.git
 ```
 
