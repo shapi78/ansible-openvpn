@@ -1,57 +1,89 @@
-Fork repo from https://github.com/amol-ovhal/openvpn
+# OpenVPN Setup with Ansible
 
-how to use:
+## Fork the Repository
 
-inside /ansible/etc/roles
+Clone the repository into your Ansible roles directory:
 
+```bash
+cd /ansible/etc/roles
 git clone git@github.com:shmador/openvpn.git
-
-make sure to add a client name to the clientlist file for example "client1"
-
-now create a playbook and inventory
-
-Playbook Example 
-----------------
 ```
+
+## Add a Client
+
+Make sure to add a client name to the `clientlist` file. For example, add:
+
+```bash
+client1
+```
+
+## Create a Playbook and Inventory
+
+### Playbook Example
+
+Create a playbook (e.g., `site.yml`) with the following content:
+
+```yaml
 ---
 - name: OpenVPN setup
   hosts: server
   become: true
   roles:
     - role: openvpn
-...
-
-$  ansible-playbook site.yml -i inventory
-
 ```
 
-Inventory
-----------
-An inventory should look like this:-
+### Run the Playbook
+
+Run the playbook with the following command:
+
+```bash
+ansible-playbook site.yml -i inventory
+```
+
+### Inventory Example
+
+Your inventory file (e.g., `inventory.ini`) should look like this:
+
 ```ini
-[server]                 
-192.xxx.x.xxx    ansible_user=ubuntu 
+[server]
+192.xxx.x.xxx ansible_user=ubuntu
 ```
 
-run: 
+Run the playbook with the inventory:
+
+```bash
 ansible-playbook -i inventory.ini playbook.yaml
+```
 
-make sure you have openvpn installed inside the client machine(usually the host machine)
+---
 
-make sure to update /etc/openvpn/client1.ovpn if neccesary (check the server ip and port)
+## Client Configuration
 
-got to the [server] machine and copy client1.ovpn into the client machine with scp for example:
+1. **Ensure OpenVPN is installed** on the client machine (usually the host machine).
+2. **Update the `client1.ovpn` file** if necessary. Make sure to check the server IP and port in the file.
+3. Copy the `client1.ovpn` file from the server to the client machine using `scp`:
 
+```bash
 scp -i [ssh_key_to_server] [server_host]@[server_ip]:/etc/openvpn/client1.ovpn /etc/openvpn/client1.ovpn
+```
 
-make sure to run if exists inside the client machine:
-systemctl stop openvpn@server
+4. If it exists, **stop the OpenVPN service** on the client machine:
 
-run:
-openvpn --config /etc/openvpn/client1.ovpn --daemon
+```bash
+sudo systemctl stop openvpn@client1
+```
 
-to test run:
+5. **Run OpenVPN** on the client machine:
+
+```bash
+sudo openvpn --config /etc/openvpn/client1.ovpn --daemon
+```
+
+6. To test the connection, run the following command on the client machine:
+
+```bash
 curl -4 ifconfig.me
+```
 
-output should be the server machine ip
+The output should show the server machine's IP address.
 
