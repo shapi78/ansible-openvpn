@@ -1,81 +1,14 @@
-Ansible Role: OpenVPN
-=====================================
+Fork repo from https://github.com/amol-ovhal/openvpn
 
-[![Amol Ovhal][amol_avatar]][amol_ovhal]
+how to use:
 
-[Amol Ovhal][amol_ovhal] 
+inside /ansible/etc/roles
 
-  [amol_ovhal]: http://www.portfolio.amolovhal.com/
-  [amol_avatar]: https://gitlab.com/uploads/-/system/user/avatar/10044525/avatar.png
+git clone git@github.com:shmador/openvpn.git
 
-An ansible role to install and configure OpenVPN server.
+make sure to add a client name to the clientlist file for example "client1"
 
-Features
-----------------
-- clientlist: Enter the namer of the client you want to add.
-- revokelist: Enter the names of the client you want to revoke.
-
-Supported OS
-------------
-  * CentOS:7
-  * CentOS:6
-  * Ubuntu:bionic
-  * Ubuntu:xenial
-  * Amazon AMI
-
-Dependencies
-------------
-* None :)
-
-Directory Layout
-----------------
-```
-amol@amol:~/github/ansible/openvpn$ tree
-.
-├── clientlist
-├── defaults
-│   └── main.yml
-├── files
-│   └── make_config.sh
-├── handlers
-│   └── main.yml
-├── media
-├── meta
-│   └── main.yaml
-├── README.md
-├── revokelist
-├── tasks
-│   ├── client_keys.yaml
-│   ├── config.yaml
-│   ├── easy-rsa.yaml
-│   ├── firewall.yaml
-│   ├── install.yaml
-│   ├── main.yaml
-│   ├── revoke.yaml
-│   └── server_keys.yaml
-└── templates
-    ├── before.rules.j2
-    ├── client.conf.j2
-    └── server.conf.j2
-
-7 directories, 18 files
-
-```
-Role Variables
---------------
-
-|**Variables**| **Default Values**| **Description**| **Type**|
-|----------|---------|---------------|-----------|
-| server_name | server | OpenVPN server Name | Optional |
-| PROTOCOL | udp | The protocaol on which the server will work | Mandatory |
-| PORT | udp | The port on which the server will work | Mandatory |
-| openvpn_server_network | 10.8.0.0 | CIDR range given to vpn network | Optional |
-| base_directory | /etc/openvpn | Configuration path of openvpn server | Optional |
-| easy_rsa_url | url | URL to download Easy RSA | Optional |
-| block_all_connection | false | Block all communication for openvpn client | Optional |
-| port_list | [80,443] | Allow specific ports for openvpn client & only applicable if block_all_connection == true | Optional |
-| out_interface | eth0 | out interface of machine or instance where openvpn is configured | Mandatory |
-| dns_resolver | 8.8.4.4 | dns has to be resolved then change value ( If you have to use private instances/ec2 from then change it to vpc cidr with dns resolver example vpc cidr is 172.31.0.0 then put value 172.31.0.2 ) | Optional |
+now create a playbook and inventory
 
 Playbook Example 
 ----------------
@@ -100,11 +33,21 @@ An inventory should look like this:-
 192.xxx.x.xxx    ansible_user=ubuntu 
 ```
 
+run: 
+ansible-playbook -i inventory.ini playbook.yaml
 
+make sure you have openvpn installed inside the client machine(usually the host machine)
 
-### Contributor :
+got to the [server] machine and copy client1.ovpn into the client machine with scp for example:
 
-[![Amol Ovhal][amol_avatar]][amol_homepage]<br/>[Amol Ovhal][amol_homepage] 
+scp -i [ssh_key_to_server] [server_host]@[server_ip]:/etc/openvpn/client1.ovpn /etc/openvpn/client1.ovpn
 
-  [amol_homepage]: https://gitlab.com/amol.ovhal
-  [amol_avatar]: https://gitlab.com/uploads/-/system/user/avatar/10044525/avatar.png
+make sure to run if exists inside the client machine:
+systemctl stop openvpn@server
+
+run:
+openvpn --config /etc/openvpn/client1.ovpn --daemon
+
+to test run:
+curl -4 ifconfig.me
+
