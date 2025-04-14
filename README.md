@@ -38,6 +38,8 @@ ansible-playbook -i inventory.ini playbook.yaml
 
 make sure you have openvpn installed inside the client machine(usually the host machine)
 
+make sure to update /etc/openvpn/client1.ovpn if neccesary (check the server ip and port)
+
 got to the [server] machine and copy client1.ovpn into the client machine with scp for example:
 
 scp -i [ssh_key_to_server] [server_host]@[server_ip]:/etc/openvpn/client1.ovpn /etc/openvpn/client1.ovpn
@@ -50,4 +52,6 @@ openvpn --config /etc/openvpn/client1.ovpn --daemon
 
 to test run:
 curl -4 ifconfig.me
+
+output should be the server machine ip
 
