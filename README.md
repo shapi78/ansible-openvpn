@@ -103,5 +103,5 @@ ip add
 ```bash
 sudo sysctl net.ipv4.ip_forward=1
 sudo iptables -P FORWARD ACCEPT
-sudo iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o ens5 -j MASQUERADE
+sudo iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o [server_network_interface] -j MASQUERADE
 ```
