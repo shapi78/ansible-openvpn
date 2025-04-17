@@ -85,3 +85,23 @@ curl -4 ifconfig.me
 ```
 
 The output should show the server machine's IP address.
+
+---
+
+## Debugging
+
+In case of no internet connection try running this on the server:
+
+1. **Check the server's network interface** (look for the one with the machine’s IPv4 address):
+
+```bash
+ip add
+```
+
+2. **Enable IP forwarding and configure iptables**:
+
+```bash
+sudo sysctl net.ipv4.ip_forward=1
+sudo iptables -P FORWARD ACCEPT
+sudo iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o ens5 -j MASQUERADE
+```
